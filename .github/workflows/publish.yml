@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # Signs the provenance attestation npm shows on the package page.
+      # Trusted publishing: npm authenticates the job by its OIDC token, and signs the provenance with it.
       id-token: write
 
     steps:
@@ -20,7 +20,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4.4.0
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
@@ -40,10 +40,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # The prepare script builds dist/ as part of publishing. Prereleases go to the next tag, so a default install
-      # never picks one up.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      # The prepare script builds dist/ as part of publishing. A prerelease (marked on the release, or a version like
+      # 1.1.0-rc.1) goes to the next tag, so a default install never picks one up.
       - name: Publish
         env:
-          DIST_TAG: ${{ github.event.release.prerelease && 'next' || 'latest' }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --tag "$DIST_TAG"
+          PRERELEASE: ${{ github.event.release.prerelease }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          tag=latest
+          if [ "$PRERELEASE" = true ] || [[ "$version" == *-* ]]; then
+            tag=next
+          fi
+          npm publish --tag "$tag"

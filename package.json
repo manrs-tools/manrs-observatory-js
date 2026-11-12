@@ -1,6 +1,6 @@
 {
-  "name": "manrs-observatory",
-  "version": "1.0.0",
+  "name": "@manrs/observatory",
+  "version": "1.0.1",
   "description": "TypeScript/JavaScript SDK for the MANRS Observatory API",
   "keywords": [
     "manrs",
