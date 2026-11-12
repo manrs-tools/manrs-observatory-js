@@ -24,7 +24,7 @@ Ships as dual ESM/CJS with TypeScript declarations, and has no runtime dependenc
 ## Installation
 
 ```bash
-npm install manrs-observatory
+npm install @manrs/observatory
 ```
 
 Or install directly from GitHub:
@@ -40,7 +40,7 @@ Installing from GitHub runs the package's `prepare` script, which builds `dist/`
 All requests require an API key. You can obtain one by logging in:
 
 ```ts
-import { Client } from "manrs-observatory";
+import { Client } from "@manrs/observatory";
 
 const client = new Client();
 const key = await client.auth.login("you@example.com", "your-password");
@@ -58,7 +58,7 @@ Long-lived keys can be minted and rotated through [`client.keys`](#resource-cove
 ## Quick start
 
 ```ts
-import { Client, ParticipantStatusApproved } from "manrs-observatory";
+import { Client, ParticipantStatusApproved } from "@manrs/observatory";
 
 const client = new Client({ apiKey: "your-api-key" });
 
@@ -119,7 +119,7 @@ for await (const p of client.participants.findPaged({ status: "approved" })) {
 **Stop early** without fetching unnecessary pages:
 
 ```ts
-import type { ROA } from "manrs-observatory";
+import type { ROA } from "@manrs/observatory";
 
 const firstFifty: ROA[] = [];
 for await (const roa of client.roas.findPaged()) {
@@ -140,7 +140,7 @@ const firstFifty = await client.roas.findPaged().toArray(50);
 All API errors throw `ManrsError`, which carries the HTTP status code and the full response body, with no separate error type to unwrap:
 
 ```ts
-import { Client, ManrsError } from "manrs-observatory";
+import { Client, ManrsError } from "@manrs/observatory";
 
 const client = new Client({ apiKey: "your-api-key" });
 
@@ -170,7 +170,7 @@ import {
   FeedbackTypeLegitimateUpdate,
   UserRoleParticipant,
   MetricTypeM1,
-} from "manrs-observatory";
+} from "@manrs/observatory";
 ```
 
 Participant statuses and types, ticket queues/types/priorities/statuses, incident feedback types, user roles and statuses, and MANRS metric types are all covered.
@@ -180,7 +180,7 @@ Participant statuses and types, ticket queues/types/priorities/statuses, inciden
 ### Participants
 
 ```ts
-import { Client, ParticipantStatusApproved, ParticipantTypeNetOps } from "manrs-observatory";
+import { Client, ParticipantStatusApproved, ParticipantTypeNetOps } from "@manrs/observatory";
 
 const client = new Client({ apiKey: "your-api-key" });
 
@@ -277,7 +277,7 @@ const groups = await client.stats.comparison(baseline, [{ id: crypto.randomUUID(
 ### Incident feedback
 
 ```ts
-import { Client, FeedbackTypeLegitimateUpdate } from "manrs-observatory";
+import { Client, FeedbackTypeLegitimateUpdate } from "@manrs/observatory";
 
 const client = new Client({ apiKey: "your-api-key" });
 
@@ -307,7 +307,7 @@ import {
   TicketPriorityMedium,
   TicketStatusOpen,
   TicketStatusClosed,
-} from "manrs-observatory";
+} from "@manrs/observatory";
 
 const client = new Client({ apiKey: "your-api-key" });
 
